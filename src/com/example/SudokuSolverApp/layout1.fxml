@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="825.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.SudokuSolverApp.Controller">
+   <children>
+      <MenuBar fx:id="menuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="New Puzzle" />
+                  <MenuItem mnemonicParsing="false" text="Open Puzzle" />
+                  <MenuItem mnemonicParsing="false" text="Save Puzzle as..." />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Puzzle">
+            <items>
+                  <Menu mnemonicParsing="false" text="Prefill Puzzle...">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#doPrefill1" text="Easy 1" />
+                        <MenuItem mnemonicParsing="false" onAction="#doPrefill2" text="Medium 1" />
+                        <MenuItem mnemonicParsing="false" onAction="#doPrefill3" text="Hard 1" />
+                    </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#runGenerator" text="Generate..." />
+              <MenuItem mnemonicParsing="false" onAction="#runSolver" text="Solve..." />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <GridPane fx:id="sudokuGridPane" prefHeight="375.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="545.0" minWidth="10.0" prefWidth="545.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="250.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="1" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="2" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="3" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="4" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="5" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="6" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="7" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="6" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="7" GridPane.rowIndex="8" />
+                 <TextField editable="true" prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="8" />
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
