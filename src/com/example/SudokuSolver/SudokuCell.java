@@ -35,6 +35,10 @@ public class SudokuCell {
         return value;
     }
 
+    public boolean hasValue() {
+        return (value!=null);
+    }
+
     public void setValue(SudokuCellValue value) {
         this.value = value;
     }
@@ -225,5 +229,11 @@ public class SudokuCell {
             return " ";
         }
         return value.toString();
+    }
+
+    public void addPossibilities() {
+        for (SudokuCellValue cellType : SudokuCellValue.values()) {
+            //if(couldCellBe())
+        }
     }
 }

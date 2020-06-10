@@ -1,7 +1,5 @@
 package com.example.SudokuSolver;
 
-import java.util.*;
-
 public class SudokuGrid {
 
     SudokuCell[][] cellGrid = new SudokuCell[9][9];
@@ -43,20 +41,25 @@ public class SudokuGrid {
 
     public boolean solve() {
         System.out.println(toString());
-
-        if(countEmpty()==0) return true;
-        int solvedOccurrences = 0;
-
-        for (int x = 0; x < 9; x++) {
-            for (int y = 0; y < 9; y++) {
-                if(getCell(x,y).solve()) solvedOccurrences++;
+        if(countEmpty()!=0) {
+            for (int x = 0; x < 9; x++) {
+                for (int y = 0; y < 9; y++) {
+                    if (!getCell(x, y).hasValue()) getCell(x,y).addPossibilities();
+                }
             }
         }
-
-        if (solvedOccurrences>0) //IF EMPTY VALUES REDUCED,  RUN AGAIN.(PASS SUCCESSFUL, WILL REPEAT)
-            return solve();
-        else
-            return false;
+        while (countEmpty() > 0) {
+            int solvedOccurrences = 0;
+            for (int x = 0; x < 9; x++) {
+                for (int y = 0; y < 9; y++) {
+                    if(getCell(x,y).solve()) solvedOccurrences++;
+                }
+            }
+            System.out.println(toString());
+            if(solvedOccurrences==0) return false;
+        }
+        if(countEmpty()==0) return true;
+        return false;
     }
 
     public int countEmpty() {
