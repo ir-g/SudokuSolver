@@ -201,6 +201,7 @@ public class SudokuCell {
 
     private boolean couldCellBe(SudokuCellValue value){
         boolean couldCellBe = true;
+        if(hasValue()) return false;
         for (SudokuCell neighbour : getAllNeighbours()) {
             if(neighbour.getValue() == value) couldCellBe = false;
         }
@@ -233,7 +234,9 @@ public class SudokuCell {
 
     public void addPossibilities() {
         for (SudokuCellValue cellType : SudokuCellValue.values()) {
-            //if(couldCellBe())
+            if(couldCellBe(cellType)){
+                potentialValues.put(cellType, true);
+            }
         }
     }
 }
