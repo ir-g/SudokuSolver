@@ -49,7 +49,7 @@ public class Controller {
             if (row == null) row = 0;
             if(child instanceof TextField){
                 TextField textField = (TextField) child;
-                textField.setText(sudokuGrid.getCell(column, row).toString());
+                textField.setText(sudokuGrid.getCell(column, row).getValueString());
             }
         }
 

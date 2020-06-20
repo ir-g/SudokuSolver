@@ -39,8 +39,11 @@ public class SudokuCell {
         return (value!=null);
     }
 
-    public void setValue(SudokuCellValue value) {
+    public boolean setValue(SudokuCellValue value) {
         this.value = value;
+        this.potentialValues.clear();
+        this.trimPossibilities();
+        return true;
     }
 
     public SudokuGrid getParentGrid() {
@@ -53,11 +56,15 @@ public class SudokuCell {
 
     public EnumMap<SudokuCellValue, Boolean> getPotentialValues() {
         for (SudokuCellValue value:  SudokuCellValue.values()) {
-            potentialValues.put(value, true);
+            if(couldCellBe(value)) potentialValues.put(value, true);
         }
         for (SudokuCell neighbour: getAllNeighbours()){
             if(neighbour.value!=null&&potentialValues.get(neighbour.value)!=null) potentialValues.remove(neighbour.value);
         }
+        for (SudokuCellValue value:  SudokuCellValue.values()) {
+            if(hasValue()&&getValue()!=value) potentialValues.remove(value);
+        }
+
         return potentialValues;
     }
 
@@ -77,6 +84,23 @@ public class SudokuCell {
             if(i!=x) sudokuCells[count++]=parentGrid.getCell(i,y);
         }
         return sudokuCells;
+    }
+
+    public SudokuCell[] getSubGrid(){
+        return getParentGrid().getSubgrid(getSubgridNumber());
+    }
+
+    public int getSubgridNumber(){
+        if(getX()<3&&getY()<3)  return 0;
+        if(getX()<3&&getY()<6)  return 1;
+        if(getX()<3&&getY()<9)  return 2;
+        if(getX()<6&&getY()<3)  return 3;
+        if(getX()<6&&getY()<6)  return 4;
+        if(getX()<6&&getY()<9)  return 5;
+        if(getX()<9&&getY()<3)  return 6;
+        if(getX()<9&&getY()<6)  return 7;
+        if(getX()<9&&getY()<9)  return 8;
+        else                    return -1;
     }
 
     public SudokuCell[] getSubgridNeighbours(){
@@ -134,6 +158,7 @@ public class SudokuCell {
 
         //Return false if value already set.
         if (getValue()!=null) return false;
+        trimPossibilities();
         //START CELL PASS
         for (SudokuCellValue cellType : SudokuCellValue.values()) {
             //CREATE A CELL GET NEIGHBOURS FUNCTION (CREATE A LIST OF CO-ORDS?)
@@ -146,20 +171,16 @@ public class SudokuCell {
             //  APPLY CELL CHECK ON ALL NEIGHBOURS
             if(couldCellBe(cellType)){
                 if(countRivalNeighbours(cellType,getAllNeighbours())==0){
-                    setValue(cellType);
-                    return true;
+                    return setValue(cellType);
                 }
                 if(countEmptyNeighbours(getColumnNeighbours())==0||countRivalNeighbours(cellType,getColumnNeighbours())==0){
-                    setValue(cellType);
-                    return true;
+                    return setValue(cellType);
                 }
                 if(countRivalNeighbours(cellType,getRowNeighbours())==0){
-                    setValue(cellType);
-                    return true;
+                    return setValue(cellType);
                 }
                 if(countRivalNeighbours(cellType,getSubgridNeighbours())==0){
-                    setValue(cellType);
-                    return true;
+                    return setValue(cellType);
                 }
             }
         }
@@ -224,8 +245,9 @@ public class SudokuCell {
         return emptyCount;
     }
 
-    @Override
-    public String toString() {
+
+
+    public String getValueString() {
         if(value == null){
             return " ";
         }
@@ -238,5 +260,77 @@ public class SudokuCell {
                 potentialValues.put(cellType, true);
             }
         }
+        //trimPossibilities();
+    }
+
+    public void trimPossibilities() {
+        for (SudokuCell neighbour: getAllNeighbours()){
+            if(neighbour.value!=null&&potentialValues.get(neighbour.value)!=null) potentialValues.remove(neighbour.value);
+        }
+
+        //TODO: Check whether a possibility in a subgrid is only in one ROW or COLUMN.
+        // i equals the index of the row or column
+
+        for (SudokuCellValue cellType : SudokuCellValue.values()) {
+            //Check rows and columns
+            for (int i = 0; i < 9; i++) {
+                int rowSearchResult = -1;
+                int colSearchResult = -1;
+                /*
+                -1  =   No possibilities for this value found. Ignore.
+                0-8 =   One row/col for possibilities found. Delete other rows
+                10  =   More than one row/col for possibilities found.
+                11  =   Value found. Ignore.
+                 */
+                for (SudokuCell sudokuCell : getParentGrid().getSubgrid(i))   {
+                    if(sudokuCell.hasValue()){
+                        potentialValues.clear();
+                        if(sudokuCell.getValue().equals(cellType)) {
+                            rowSearchResult = 11;
+                            colSearchResult = 11;
+                            break;
+                        }
+                    }else{
+                        if (sudokuCell.getPotentialValues().get(cellType)!=null&&sudokuCell.getPotentialValues().get(cellType).equals(cellType)){
+                            if(rowSearchResult==-1){
+                                rowSearchResult = sudokuCell.getX();
+                            }else if(rowSearchResult>-1&&rowSearchResult<9&&rowSearchResult!=sudokuCell.getX()){
+                                rowSearchResult = 10;
+                            }
+                            if(colSearchResult==-1){
+                                colSearchResult = sudokuCell.getY();
+                            }else if(colSearchResult>-1&&colSearchResult<9&&colSearchResult!=sudokuCell.getY()){
+                                colSearchResult = 10;
+                            }
+                        }
+                    }
+                }
+                if(colSearchResult>-1&&colSearchResult<9){
+                    //Remove any non-subgrid cols
+                    for (SudokuCell sudokuCell : getParentGrid().getCol(colSearchResult)){
+                        if (sudokuCell.getSubgridNumber()!=getSubgridNumber()&&getPotentialValues().get(cellType)){
+                            sudokuCell.getPotentialValues().remove(cellType);;
+                        }
+                    }
+                }
+                if(rowSearchResult>-1&&rowSearchResult<9){
+                    //Remove any non-subgrid rows
+                    for (SudokuCell sudokuCell : getParentGrid().getRow(rowSearchResult)){
+                        if (sudokuCell.getSubgridNumber()!=getSubgridNumber()&&getPotentialValues().get(cellType)){
+                            sudokuCell.getPotentialValues().remove(cellType);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "SudokuCell{" +
+                "x=" + x +
+                ", y=" + y +
+                ", value=" + value +
+                '}';
     }
 }
