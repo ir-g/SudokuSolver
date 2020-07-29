@@ -1,6 +1,7 @@
 package com.example.SudokuSolver;
 
 import java.util.EnumMap;
+import java.util.Set;
 
 public class SudokuCell {
     private int x, y;
@@ -332,5 +333,21 @@ public class SudokuCell {
                 ", y=" + y +
                 ", value=" + value +
                 '}';
+    }
+
+    public String getPossibilityString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Posssibilties for ");
+        stringBuilder.append(getX());
+        stringBuilder.append(" ");
+        stringBuilder.append(getY());
+        stringBuilder.append(":");
+        Set<SudokuCellValue> values = getPotentialValues().keySet();
+        for (SudokuCellValue value:
+                values) {
+            stringBuilder.append(" ");
+            stringBuilder.append(value.toString());
+        }
+        return stringBuilder.toString();
     }
 }

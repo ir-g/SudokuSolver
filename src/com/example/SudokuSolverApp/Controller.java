@@ -1,12 +1,14 @@
 package com.example.SudokuSolverApp;
 
 
+import com.example.SudokuSolver.SudokuCell;
 import com.example.SudokuSolver.SudokuGrid;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
 
@@ -49,7 +51,9 @@ public class Controller {
             if (row == null) row = 0;
             if(child instanceof TextField){
                 TextField textField = (TextField) child;
-                textField.setText(sudokuGrid.getCell(column, row).getValueString());
+                SudokuCell sudokuCell = sudokuGrid.getCell(column, row);
+                textField.setText(sudokuCell.getValueString());
+                textField.setTooltip(new Tooltip(sudokuCell.getPossibilityString()));
             }
         }
 

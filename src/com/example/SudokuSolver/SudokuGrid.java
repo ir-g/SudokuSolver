@@ -1,9 +1,11 @@
 package com.example.SudokuSolver;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
-public class SudokuGrid {
+public class SudokuGrid implements Cloneable {
 
     SudokuCell[][] cellGrid = new SudokuCell[9][9];
 
@@ -51,6 +53,7 @@ public class SudokuGrid {
                 }
             }
         }
+        //TODO: MOVE BACK TO RECURSION
         while (countEmpty() > 0) {
             /*
             //TODO: Check whether a possibility in a subgrid is only in one ROW or COLUMN.
@@ -76,32 +79,52 @@ public class SudokuGrid {
                 }
             }
             System.out.println(toString());
+
             if(solvedOccurrences==0){
-                //TODO: PRINT ALL POSSIBILITIES FOR EACH CELL
+                double permutations = 1;
+                int possibleCount = 0;
+                //TODO: ADD DATA STRUCTURE
                 for (int i = 0; i < 9; i++) {
                     for (int j = 0; j < 9; j++) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append("Posssibilties for ");
-                        stringBuilder.append(i);
-                        stringBuilder.append(" ");
-                        stringBuilder.append(j);
-                        stringBuilder.append(": ");
-                        Set<SudokuCellValue> values = getCell(i, j).getPotentialValues().keySet();
-                        for (SudokuCellValue value:
-                             values) {
-                            stringBuilder.append(value.toString());
-                            stringBuilder.append(" ");
-                        }
-                        if(values.size()>0){
-                            System.out.println(stringBuilder.toString());
-                        }
+                        SudokuCell cell = getCell(i, j);
+                        //TODO: LOG TO STRUCTURE EACH POSSIBILITY
+                        int potentialSize = cell.getPotentialValues().size();
+                        /*
+                        if(potentialSize>0){
+                            permutations = permutations * potentialSize;
+                            possibleCount = possibleCount + potentialSize;
+                            System.out.println(cell.getPossibilityString());
+                            //TODO:ADD PREP ATTEMPT METHOD FOR CREATING A NEW SUDOKU GRID
+                            for (Map.Entry<SudokuCellValue,Boolean> potentialValue : cell.getPotentialValues().entrySet()) {
+                                if(potentialValue.getValue()==false) continue;
+                                SudokuGrid attemptGrid = prepAttempt(i,j,potentialValue.getKey());
+                                boolean attemptResult = attemptGrid.solve();
+                                if(attemptResult == true && attemptGrid.countEmpty()==0){
+                                    //TODO: CREATE A SET CELL GRID METHOD
+                                    setCellGrid(attemptGrid.getCellGrid());
+                                    return true;
+                                }
+                            }
+                        }*/
                     }
                 }
+                System.out.println(String.format("Permeations possible: %s, Possible Count: %d, Empty Cell count: %d", permutations, possibleCount, countEmpty()));
                 return false;
             }
         }
         if(countEmpty()==0) return true;
         return false;
+    }
+
+    public SudokuGrid prepAttempt(int x,int y, SudokuCellValue value){
+        SudokuGrid newSudokuGrid = new SudokuGrid(getCellGrid().clone());
+        try {
+            newSudokuGrid = (SudokuGrid) this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        newSudokuGrid.getCell(x,y).setValue(value);
+        return newSudokuGrid;
     }
 
     public int countEmpty() {
@@ -124,6 +147,9 @@ public class SudokuGrid {
 
     public SudokuCell[][] getCellGrid() {
         return cellGrid;
+    }
+    public void setCellGrid(SudokuCell[][] cellGrid){
+        this.cellGrid = cellGrid.clone();
     }
 
     public SudokuCell[] getRow(int i){
