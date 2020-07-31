@@ -1,5 +1,8 @@
 # SudokuSolver
-A basic sudoku solver, with GUI. [WIP, See [Issues](https://github.com/ir-g/SudokuSolver/issues)]
+A basic sudoku solver, with GUI - solves most problems very inefficiently. [WIP, See [Issues](https://github.com/ir-g/SudokuSolver/issues)]
+
+**This program may fail aggressively in certain circumstances.**
+
 
 Notes on sudoku:
 * Sudoku isn't a number puzzle, so much as a list of fixed values
