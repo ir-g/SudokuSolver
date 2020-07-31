@@ -46,83 +46,70 @@ public class SudokuGrid implements Cloneable {
 
     public boolean solve() {
         System.out.println(toString());
-        if(countEmpty()!=0) {
+
+        if (countEmpty() == 0) return true;
+        int solvedOccurrences = 0;
+
+        if (countEmpty() != 0) {
             for (int x = 0; x < 9; x++) {
                 for (int y = 0; y < 9; y++) {
-                    if (!getCell(x, y).hasValue()) getCell(x,y).addPossibilities();
+                    if (!getCell(x, y).hasValue()) getCell(x, y).addPossibilities();
                 }
             }
         }
-        //TODO: MOVE BACK TO RECURSION
-        while (countEmpty() > 0) {
-            /*
-            //TODO: Check whether a possibility in a subgrid is only in one ROW or COLUMN.
-            // i equals the index of the row or column
-            // Iterate through subgrids
-            for (int i = 0; i < 3; i++) {
 
-
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                if (getCell(x, y).solve()) solvedOccurrences++;
             }
+        }
+
+        if (solvedOccurrences > 0) {
+            //IF EMPTY VALUES REDUCED,  RUN AGAIN.(PASS SUCCESSFUL, WILL REPEAT)
+            return solve();
+        } else {
+            //BRUTE FORCE ATTEMPTS
+            double permutations = 1;
+            int possibleCount = 0;
             for (int i = 0; i < 9; i++) {
-                // j equals the index of the value in that row or column.
                 for (int j = 0; j < 9; j++) {
-
-
-                }
-            }*/
-
-
-            int solvedOccurrences = 0;
-            for (int x = 0; x < 9; x++) {
-                for (int y = 0; y < 9; y++) {
-                    if(getCell(x,y).solve()) solvedOccurrences++;
-                }
-            }
-            System.out.println(toString());
-
-            if(solvedOccurrences==0){
-                double permutations = 1;
-                int possibleCount = 0;
-                //TODO: ADD DATA STRUCTURE
-                for (int i = 0; i < 9; i++) {
-                    for (int j = 0; j < 9; j++) {
-                        SudokuCell cell = getCell(i, j);
-                        //TODO: LOG TO STRUCTURE EACH POSSIBILITY
-                        int potentialSize = cell.getPotentialValues().size();
-                        /*
-                        if(potentialSize>0){
-                            permutations = permutations * potentialSize;
-                            possibleCount = possibleCount + potentialSize;
-                            System.out.println(cell.getPossibilityString());
-                            //TODO:ADD PREP ATTEMPT METHOD FOR CREATING A NEW SUDOKU GRID
-                            for (Map.Entry<SudokuCellValue,Boolean> potentialValue : cell.getPotentialValues().entrySet()) {
-                                if(potentialValue.getValue()==false) continue;
-                                SudokuGrid attemptGrid = prepAttempt(i,j,potentialValue.getKey());
-                                boolean attemptResult = attemptGrid.solve();
-                                if(attemptResult == true && attemptGrid.countEmpty()==0){
-                                    //TODO: CREATE A SET CELL GRID METHOD
-                                    setCellGrid(attemptGrid.getCellGrid());
-                                    return true;
-                                }
+                    SudokuCell cell = getCell(i, j);
+                    int potentialSize = cell.getPotentialValues().size();
+                    if (potentialSize > 0) {
+                        permutations = permutations * potentialSize;
+                        possibleCount = possibleCount + potentialSize;
+                        System.out.println(cell.getPossibilityString());
+                        for (Map.Entry<SudokuCellValue, Boolean> potentialValue : cell.getPotentialValues().entrySet()) {
+                            if (potentialValue.getValue() == false) continue;
+                            SudokuGrid attemptGrid = prepAttempt(i, j, potentialValue.getKey());
+                            boolean attemptResult = attemptGrid.solve();
+                            if (attemptResult == true && attemptGrid.countEmpty() == 0) {
+                                setCellGrid(attemptGrid.getCellGrid());
+                                return true;
                             }
-                        }*/
+                        }
                     }
                 }
-                System.out.println(String.format("Permeations possible: %s, Possible Count: %d, Empty Cell count: %d", permutations, possibleCount, countEmpty()));
-                return false;
             }
+            return false;
         }
-        if(countEmpty()==0) return true;
-        return false;
     }
 
+
     public SudokuGrid prepAttempt(int x,int y, SudokuCellValue value){
-        SudokuGrid newSudokuGrid = new SudokuGrid(getCellGrid().clone());
+        SudokuGrid newSudokuGrid = new SudokuGrid();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                newSudokuGrid.setCell(i,j,new SudokuCell(i,j,getCell(i,j).getValue(),newSudokuGrid));
+            }
+        }
+        /*
         try {
             newSudokuGrid = (SudokuGrid) this.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+         */
         newSudokuGrid.getCell(x,y).setValue(value);
         return newSudokuGrid;
     }
